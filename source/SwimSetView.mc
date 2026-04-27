@@ -77,10 +77,10 @@ class SwimSetView extends WatchUi.View {
         var seconds = remaining % 60;
         var timeStr = minutes.format("%02d") + ":" + seconds.format("%02d");
 
-        var unitStr = _poolUnit == 0 ? "yds" : "m";
+        var unitStr = _poolUnit == 0 ? L(Rez.Strings.Yds) : L(Rez.Strings.M);
         var totalDist = _currentSet * (_poolSize * 2);
 
-        dc.drawText(centerX, height * 0.10, Graphics.FONT_SMALL, "Set " + _currentSet + " / " + _totalSets, Graphics.TEXT_JUSTIFY_CENTER);
+        dc.drawText(centerX, height * 0.10, Graphics.FONT_SMALL, L(Rez.Strings.Set) + " " + _currentSet + " / " + _totalSets, Graphics.TEXT_JUSTIFY_CENTER);
         dc.drawText(centerX, height * 0.22, Graphics.FONT_SMALL, totalDist + " " + unitStr, Graphics.TEXT_JUSTIFY_CENTER);
 
         dc.drawText(centerX, height * 0.38, Graphics.FONT_NUMBER_HOT, timeStr, Graphics.TEXT_JUSTIFY_CENTER);
