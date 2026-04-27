@@ -77,10 +77,10 @@ class SwimSetView extends WatchUi.View {
         var seconds = remaining % 60;
         var timeStr = minutes.format("%02d") + ":" + seconds.format("%02d");
 
-        var unitStr = _poolUnit == 0 ? "yds" : "m";
+        var unitStr = _poolUnit == 0 ? L(Rez.Strings.Yds) : L(Rez.Strings.M);
         var totalDist = _currentSet * (_poolSize * 2);
 
-        dc.drawText(centerX, height * 0.10, Graphics.FONT_SMALL, "Set " + _currentSet + " / " + _totalSets, Graphics.TEXT_JUSTIFY_CENTER);
+        dc.drawText(centerX, height * 0.10, Graphics.FONT_SMALL, L(Rez.Strings.Set) + " " + _currentSet + " / " + _totalSets, Graphics.TEXT_JUSTIFY_CENTER);
         dc.drawText(centerX, height * 0.22, Graphics.FONT_SMALL, totalDist + " " + unitStr, Graphics.TEXT_JUSTIFY_CENTER);
 
         dc.drawText(centerX, height * 0.38, Graphics.FONT_NUMBER_HOT, timeStr, Graphics.TEXT_JUSTIFY_CENTER);
@@ -107,7 +107,11 @@ class SwimSetView extends WatchUi.View {
             statusStr = L(Rez.Strings.Stopped);
             dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
         }
-        dc.drawText(centerX, height * 0.85, Graphics.FONT_SMALL, statusStr, Graphics.TEXT_JUSTIFY_CENTER);
+        dc.drawText(centerX, height * 0.82, Graphics.FONT_SMALL, statusStr, Graphics.TEXT_JUSTIFY_CENTER);
+
+        if (_running) {
+            dc.drawText(centerX, height * 0.90, Graphics.FONT_XTINY, L(Rez.Strings.TouchLocked), Graphics.TEXT_JUSTIFY_CENTER);
+        }
     }
 
     function onHide() {
@@ -138,7 +142,7 @@ class SwimSetView extends WatchUi.View {
             }
 
             triggerVibration([new Attention.VibeProfile(100, 1000)]);
-            
+
             _setStartTimeValue = Time.now().value();
             _timer.start(method(:onTimerTick), 1000, true);
             WatchUi.requestUpdate();
@@ -168,7 +172,7 @@ class SwimSetView extends WatchUi.View {
         if (_paused) {
             _paused = false;
             _running = true;
-            
+
             // Adjust start time by the duration of the pause
             var pauseDuration = Time.now().value() - _pauseStartTimeValue;
             _setStartTimeValue += pauseDuration;

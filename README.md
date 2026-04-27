@@ -25,9 +25,13 @@ A premium, localized Garmin watch app for interval swim training. This app featu
 - A developer key (`developer_key`).
 
 ### 2. Build the App
-Run the following command from the project root:
+Debug build:
 ```bash
 monkeyc -o bin/swimset.prg -f monkey.jungle -y developer_key -d descentg2
+```
+Distribution build:
+```bash
+monkeyc -e -d descentg2 -f monkey.jungle -o bin/swimset.iq -y developer_key.der
 ```
 
 ### 3. Deploy to Device

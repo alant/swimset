@@ -10,29 +10,35 @@
     <string id="Discard">Discard|放弃|破棄</string>
     <string id="Options">Options|选项|オプション</string>
     <string id="Settings">Settings|设置|設定</string>
-    
+
     <string id="PoolSize">Pool Size|泳池长度|プールサイズ</string>
     <string id="PoolUnit">Pool Unit|单位|単位</string>
-    <string id="SetMin">Set Minutes|分钟|分</string>
-    <string id="SetSec">Set Seconds|秒数|秒</string>
+    <string id="PerSetTime">Per Set Time|每组时间|セット時間</string>
+    <string id="Minutes">Minutes|分|分</string>
+    <string id="Seconds">Seconds|秒|秒</string>
     <string id="NumSets">Num Sets|组数|セット数</string>
     <string id="Alarm30">30s Alarm|30秒提醒|30秒アラーム</string>
     <string id="Alarm20">20s Alarm|20秒提醒|20秒アラーム</string>
     <string id="Alarm10">10s Alarm|10秒提醒|10秒アラーム</string>
     <string id="AppLang">Language|语言|言語</string>
-    
+
     <string id="Yards">Yards|码|ヤード</string>
     <string id="Meters">Meters|米|メートル</string>
     <string id="On">On|开启|オン</string>
     <string id="Off">Off|关闭|オフ</string>
-    
+
     <string id="Swimming">Swimming|游泳中|泳ぎ中</string>
+    <string id="TouchLocked">Touch Locked|触控已锁定|タッチロック中</string>
     <string id="Stopped">Stopped|已停止|停止中</string>
     <string id="Paused">Paused|已暂停|一時停止中</string>
     <string id="Selected">Selected|已选择|選択済み</string>
-    
+
     <string id="LangAuto">System|系统默认|システム設定</string>
     <string id="LangEN">English|英语|英語</string>
     <string id="LangZH">中文</string>
     <string id="LangJA">日本語</string>
+
+    <string id="Set">Set|组|セット</string>
+    <string id="Yds">yds|码|ヤード</string>
+    <string id="M">m|米|m</string>
 </resources>

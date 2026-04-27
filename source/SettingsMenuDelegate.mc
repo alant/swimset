@@ -17,15 +17,15 @@ class SwimSetSettingsDelegate extends WatchUi.Menu2InputDelegate {
 
     function onSelect(item) {
         var idx = item.getId();
-        
+
         if (idx == :poolSize) {
             pushOptions(L(Rez.Strings.PoolSize), "PoolSize", [10, 15, 20, 25, 50], null, item);
         } else if (idx == :poolUnit) {
             pushOptions(L(Rez.Strings.PoolUnit), "PoolUnit", [0, 1], [L(Rez.Strings.Yards), L(Rez.Strings.Meters)], item);
-        } else if (idx == :setMin) {
-            pushOptions(L(Rez.Strings.SetMin), "SetTimeMinutes", [0, 1, 2, 3, 4, 5], null, item);
-        } else if (idx == :setSec) {
-            pushOptions(L(Rez.Strings.SetSec), "SetTimeSeconds", [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55], null, item);
+        } else if (idx == :perSetTime) {
+            var view = new SetTimeView();
+            var delegate = new SetTimeDelegate(view, _mainView, item);
+            WatchUi.pushView(view, delegate, WatchUi.SLIDE_LEFT);
         } else if (idx == :numSets) {
             var vals = new [20];
             for (var i = 0; i < 20; i++) { vals[i] = i + 1; }
@@ -92,8 +92,6 @@ class SettingOptionsDelegate extends WatchUi.Menu2InputDelegate {
         var subLabel = "";
         if (_key.equals("PoolSize")) { subLabel = rd.get("PoolSize", 25).toString(); }
         else if (_key.equals("PoolUnit")) { subLabel = rd.unitLabel(); }
-        else if (_key.equals("SetTimeMinutes")) { subLabel = rd.get("SetTimeMinutes", 1).toString(); }
-        else if (_key.equals("SetTimeSeconds")) { subLabel = rd.get("SetTimeSeconds", 50).format("%02d"); }
         else if (_key.equals("NumSets")) { subLabel = rd.get("NumSets", 8).toString(); }
         else if (_key.equals("Enable30SecAlarm")) { subLabel = rd.alarmLabel("Enable30SecAlarm"); }
         else if (_key.equals("Enable20SecAlarm")) { subLabel = rd.alarmLabel("Enable20SecAlarm"); }
@@ -118,8 +116,7 @@ function buildSettingsMenu(mainView) {
     var menu = new WatchUi.Menu2({:title => L(Rez.Strings.Settings)});
     menu.addItem(new WatchUi.MenuItem(L(Rez.Strings.PoolSize), rd.get("PoolSize", 25).toString(),            :poolSize, {}));
     menu.addItem(new WatchUi.MenuItem(L(Rez.Strings.PoolUnit), rd.unitLabel(),                     :poolUnit, {}));
-    menu.addItem(new WatchUi.MenuItem(L(Rez.Strings.SetMin),   rd.get("SetTimeMinutes", 1).toString(),        :setMin,   {}));
-    menu.addItem(new WatchUi.MenuItem(L(Rez.Strings.SetSec),   rd.get("SetTimeSeconds", 50).format("%02d"), :setSec, {}));
+    menu.addItem(new WatchUi.MenuItem(L(Rez.Strings.PerSetTime), rd.timeLabel(), :perSetTime, {}));
     menu.addItem(new WatchUi.MenuItem(L(Rez.Strings.NumSets),  rd.get("NumSets", 8).toString(),               :numSets,  {}));
     menu.addItem(new WatchUi.MenuItem(L(Rez.Strings.Alarm30),  rd.alarmLabel("Enable30SecAlarm"),  :alarm30,  {}));
     menu.addItem(new WatchUi.MenuItem(L(Rez.Strings.Alarm20),  rd.alarmLabel("Enable20SecAlarm"),  :alarm20,  {}));
@@ -158,5 +155,11 @@ class SettingsReader {
         if (v == 1) { return L(Rez.Strings.LangZH); }
         if (v == 2) { return L(Rez.Strings.LangJA); }
         return L(Rez.Strings.LangAuto);
+    }
+
+    function timeLabel() {
+        var min = get("SetTimeMinutes", 1);
+        var sec = get("SetTimeSeconds", 50);
+        return min.format("%d") + ":" + sec.format("%02d");
     }
 }

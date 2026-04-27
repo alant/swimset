@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <iq:manifest xmlns:iq="http://www.garmin.com/xml/connectiq" version="3">
-  <iq:application entry="SwimSetApp" id="c01e04b84c114347942f0da647f29d19" launcherIcon="@Drawables.LauncherIcon" minApiLevel="3.2.0" name="@Strings.AppName" type="watch-app" version="1.0.0">
+  <iq:application entry="SwimSetApp" id="c01e04b84c114347942f0da647f29d19" launcherIcon="@Drawables.LauncherIcon" minApiLevel="3.3.0" name="@Strings.AppName" type="watch-app" version="26.4.2">
     <iq:products>
       <iq:product id="descentg1"/>
       <iq:product id="descentg2"/>
