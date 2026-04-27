@@ -1,0 +1,21 @@
+# Garmin ConnectIQ build output
+bin/
+gen/
+internal-mir/
+external-mir/
+*.prg
+*.prg.debug.xml
+*.iq
+build.log
+
+# Private developer keys - DO NOT COMMIT THESE
+developer_key
+developer_key.der
+developer_key.pem
+
+# OS generated files
+.DS_Store
+
+# Tooling and temporary files
+.claude/
+*-settings.json
