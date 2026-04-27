@@ -6,6 +6,7 @@ using Toybox.Attention;
 using Toybox.ActivityRecording;
 using Toybox.Activity;
 using Toybox.Application;
+using Toybox.Time;
 
 class SwimSetView extends WatchUi.View {
     private var _timer;
@@ -13,6 +14,8 @@ class SwimSetView extends WatchUi.View {
     private var _paused = false;
     private var _currentSet = 1;
     private var _elapsedSeconds = 0;
+    private var _setStartTimeValue = 0;
+    private var _pauseStartTimeValue = 0;
     private var _totalSets;
     private var _setTimeSeconds;
     private var _poolSize;
@@ -135,7 +138,8 @@ class SwimSetView extends WatchUi.View {
             }
 
             triggerVibration([new Attention.VibeProfile(100, 1000)]);
-
+            
+            _setStartTimeValue = Time.now().value();
             _timer.start(method(:onTimerTick), 1000, true);
             WatchUi.requestUpdate();
         }
@@ -145,6 +149,7 @@ class SwimSetView extends WatchUi.View {
         if (_running) {
             _running = false;
             _paused = true;
+            _pauseStartTimeValue = Time.now().value();
             _timer.stop();
             if (_session != null) {
                 try {
@@ -163,6 +168,11 @@ class SwimSetView extends WatchUi.View {
         if (_paused) {
             _paused = false;
             _running = true;
+            
+            // Adjust start time by the duration of the pause
+            var pauseDuration = Time.now().value() - _pauseStartTimeValue;
+            _setStartTimeValue += pauseDuration;
+
             if (_session != null) {
                 try {
                     _session.start();
@@ -248,6 +258,8 @@ class SwimSetView extends WatchUi.View {
         }
         _currentSet = 1;
         _elapsedSeconds = 0;
+        _setStartTimeValue = 0;
+        _pauseStartTimeValue = 0;
         _30secTriggered = false;
         _20secTriggered = false;
         _10secTriggered = false;
@@ -271,6 +283,8 @@ class SwimSetView extends WatchUi.View {
 
         _currentSet = 1;
         _elapsedSeconds = 0;
+        _setStartTimeValue = 0;
+        _pauseStartTimeValue = 0;
         _30secTriggered = false;
         _20secTriggered = false;
         _10secTriggered = false;
@@ -280,7 +294,9 @@ class SwimSetView extends WatchUi.View {
     }
 
     function onTimerTick() {
-        _elapsedSeconds++;
+        if (_running) {
+            _elapsedSeconds = Time.now().value() - _setStartTimeValue;
+        }
 
         var remaining = _setTimeSeconds - _elapsedSeconds;
 
@@ -325,6 +341,7 @@ class SwimSetView extends WatchUi.View {
             }
 
             _currentSet++;
+            _setStartTimeValue = Time.now().value();
             _elapsedSeconds = 0;
             _30secTriggered = false;
             _20secTriggered = false;

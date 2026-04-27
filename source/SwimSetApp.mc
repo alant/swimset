@@ -22,6 +22,7 @@ class SwimSetApp extends Application.AppBase {
     }
 
     function onSettingsChanged() {
+        _lCache = {}; // Clear cache on settings change
         if (_view != null) {
             _view.loadSettings();
             WatchUi.requestUpdate();
@@ -29,10 +30,12 @@ class SwimSetApp extends Application.AppBase {
     }
 }
 
-// ── Localization Helper ──────────────────────────────────────────────────────
+// ── Localization Helper with Caching ─────────────────────────────────────────
+
+var _lCache = {};
+var _lCachedLang = null;
 
 function L(id) {
-    var s = WatchUi.loadResource(id) as Toybox.Lang.String;
     var lang = Application.Storage.getValue("AppLanguage");
     
     // -1 or null means System Default
@@ -43,20 +46,34 @@ function L(id) {
         else { lang = 0; }
     }
 
-    var start = 0;
+    // Reset cache if language changed manually
+    if (lang != _lCachedLang) {
+        _lCache = {};
+        _lCachedLang = lang;
+    }
+
+    if (_lCache.hasKey(id)) {
+        return _lCache[id];
+    }
+
+    var s = WatchUi.loadResource(id) as Toybox.Lang.String;
+    var original = s;
+
     for (var i = 0; i < lang; i++) {
         var found = s.find("|");
         if (found != null) {
-            start += found + 1;
             s = s.substring(found + 1, s.length());
         } else {
-            // If we're looking for index 1 or 2 but there's no |, return the whole thing (English)
-            s = WatchUi.loadResource(id) as Toybox.Lang.String;
-            var fallback = s.find("|");
-            return (fallback != null) ? s.substring(0, fallback) : s;
+            // Fallback to first part (English)
+            var fallback = original.find("|");
+            var res = (fallback != null) ? original.substring(0, fallback) : original;
+            _lCache[id] = res;
+            return res;
         }
     }
     
     var end = s.find("|");
-    return (end != null) ? s.substring(0, end) : s;
+    var finalRes = (end != null) ? s.substring(0, end) : s;
+    _lCache[id] = finalRes;
+    return finalRes;
 }
