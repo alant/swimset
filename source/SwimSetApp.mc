@@ -22,7 +22,7 @@ class SwimSetApp extends Application.AppBase {
     }
 
     function onSettingsChanged() {
-        _lCache = {} as Dictionary<Symbol, String>; // Clear cache on settings change
+        _lCache = {} as Toybox.Lang.Dictionary<Toybox.Lang.Symbol, Toybox.Lang.String>; // Clear cache on settings change
         if (_view != null) {
             _view.loadSettings();
             WatchUi.requestUpdate();
@@ -32,10 +32,10 @@ class SwimSetApp extends Application.AppBase {
 
 // ── Localization Helper with Caching ─────────────────────────────────────────
 
-var _lCache as Dictionary<Symbol, String> = {} as Dictionary<Symbol, String>;
-var _lCachedLang as Number or Null = null;
+var _lCache as Toybox.Lang.Dictionary<Toybox.Lang.Symbol, Toybox.Lang.String> = {} as Toybox.Lang.Dictionary<Toybox.Lang.Symbol, Toybox.Lang.String>;
+var _lCachedLang as Toybox.Lang.Number or Null = null;
 
-function L(id as Symbol) as String {
+function L(id as Toybox.Lang.Symbol) as Toybox.Lang.String {
     var lang = Application.Storage.getValue("AppLanguage");
     
     // -1 or null means System Default
@@ -48,15 +48,15 @@ function L(id as Symbol) as String {
 
     // Reset cache if language changed manually
     if (lang != _lCachedLang) {
-        _lCache = {} as Dictionary<Symbol, String>;
+        _lCache = {} as Toybox.Lang.Dictionary<Toybox.Lang.Symbol, Toybox.Lang.String>;
         _lCachedLang = lang;
     }
 
     if (_lCache.hasKey(id)) {
-        return _lCache.get(id) as String;
+        return _lCache.get(id) as Toybox.Lang.String;
     }
 
-    var s = WatchUi.loadResource(id) as String;
+    var s = WatchUi.loadResource(id) as Toybox.Lang.String;
     var original = s;
 
     for (var i = 0; i < lang; i++) {
