@@ -1,132 +1,70 @@
 # Swim Set Timer - Garmin Connect IQ App
 
-A Garmin watch app for interval swim training with configurable sets, pool sizes, and multiple alarms.
+A premium, localized Garmin watch app for interval swim training. This app features a configurable interval timer, pool size settings, multiple proximity alarms, and a specialized "Swim Mode" input lock.
+
+> [!IMPORTANT]
+> **Hardware Testing**: This application has been physically tested **only on the Garmin Descent G2**. While it is compatible with many other devices (Fenix, Venu, Forerunner), user experience may vary on those models.
 
 ## Features
 
-- **Configurable pool size**: 25-50 yards or meters
-- **Flexible set timing**: Configure minutes and seconds (default 1:50)
-- **Multiple sets**: Set how many intervals to complete (default 8)
-- **Distance display**: Automatically calculates distance (pool size × 2)
-- **Smart alarms**:
-  - Set completion vibration (double pulse)
-  - Warning alarm at configurable time (default 1:20 into set)
-  - 20-second countdown alarm
-  - 10-second countdown alarm
+- **Multi-Language Support**: Fully localized for English, Chinese (Simplified & Traditional), and Japanese.
+- **Swim Mode (Touch Lock)**: Automatically disables the touchscreen while the timer is running to prevent accidental water-induced taps.
+- **Physical Button Support**: The hardware START/STOP button remains functional to pause/resume workouts even when the screen is locked.
+- **Configurable Pool Size**: 25-50 yards or meters.
+- **Flexible Set Timing**: Configure minutes and seconds for your intervals.
+- **Smart Alarms**:
+  - Set completion vibration (distinct double pulse).
+  - Warning alarm at configurable time (e.g., 5 seconds before set ends).
+  - 20-second and 10-second countdown alerts.
+- **Red Pause Ring**: A vibrant red outer ring appears when the timer is paused, making status clear at a glance.
 
-## Setup Instructions
+## Installation & Setup
 
-### 1. Install Garmin Connect IQ SDK
+### 1. Requirements
+- Garmin Connect IQ SDK 4.x or newer.
+- A developer key (`developer_key`).
 
-**Option A: Using VS Code (Recommended)**
-1. Install [Visual Studio Code](https://code.visualstudio.com/)
-2. Install the "Monkey C" extension from the VS Code marketplace
-3. Open Command Palette (Cmd+Shift+P on Mac, Ctrl+Shift+P on Windows)
-4. Run "Monkey C: Verify Installation" - this will guide you through SDK setup
-
-**Option B: Manual Installation**
-1. Download the SDK from [developer.garmin.com/connect-iq/sdk](https://developer.garmin.com/connect-iq/sdk/)
-2. Extract and add the `bin` directory to your PATH
-3. Set environment variable: `export MB_HOME=/path/to/sdk`
-
-### 2. Generate Developer Key
-
+### 2. Build the App
+Run the following command from the project root:
 ```bash
-openssl genrsa -out developer_key 4096
-openssl pkcs8 -topk8 -inform PEM -outform DER -in developer_key -out developer_key.der -nocrypt
+monkeyc -o bin/swimset.prg -f monkey.jungle -y developer_key -d descentg2
 ```
 
-### 3. Build the App
-
-```bash
-monkeyc -o swimset.prg -f monkey.jungle -y developer_key.der
-```
-
-### 4. Test in Simulator
-
-```bash
-connectiq
-```
-
-Then load `swimset.prg` in the simulator and select a compatible device (Fenix 7, Vivoactive 4, Venu 2, etc.)
-
-### 5. Deploy to Device
-
-**Via Garmin Express:**
-1. Connect your watch to your computer
-2. Copy `swimset.prg` to the watch's `GARMIN/APPS` folder
-
-**Via Connect IQ Mobile App:**
-1. Build and sign the app
-2. Use the Connect IQ app to sideload
+### 3. Deploy to Device
+1. Connect your watch to your computer.
+2. Copy `bin/swimset.prg` to the watch's `/GARMIN/APPS` folder.
 
 ## Usage
 
 ### Controls
-- **Select button**: Start timer
-- **Back button**: Stop timer  
-- **Menu button**: Reset timer
+- **START/STOP Button**: Opens the **Options Menu** (Start, Pause, Resume, Save, Discard).
+- **Touch Screen**: Works as normal while the timer is stopped or paused. Disabled during an active swim set.
+- **BACK Button**: Returns to previous screens but is blocked during a set to prevent accidental exits.
 
 ### Configuration
-
-Configure settings through:
-- Garmin Connect IQ mobile app
-- Garmin Express desktop app
-- Connect IQ Store (if published)
-
-**Available Settings:**
-- Pool Size: 25-50 (yards or meters)
-- Pool Unit: Yards or Meters
-- Set Time: Minutes (0-5) and Seconds (0-59)
-- Number of Sets: 1-50
-- Warning Time: 10-60 seconds into the set
-- Enable/Disable 20-second alarm
-- Enable/Disable 10-second alarm
-
-## Display
-
-The watch shows:
-- Current set / total sets
-- Time remaining in current set (MM:SS)
-- Distance for current set (e.g., "50yds")
-- Status (Running/Stopped)
-
-## Alarm Patterns
-
-- **Set completion**: Double vibration (300ms, pause, 300ms)
-- **Warning/countdown alarms**: Single vibration (200ms)
-
-## Compatible Devices
-
-Tested on devices with Connect IQ 3.2.0+:
-- Fenix 7 / 7S / 7X
-- Fenix 6 / 6S / 6X Pro
-- Vivoactive 4 / 4S
-- Venu 2 / 2S / 2 Plus
+Configure settings through the on-device **Settings** menu or via the Garmin Connect IQ mobile app.
+- **Pool Size/Units**: Set your pool length.
+- **Set Time**: The target time for each interval.
+- **App Language**: Choose between Auto (System Default), English, Chinese, or Japanese.
 
 ## Project Structure
 
 ```
 swimset/
-├── manifest.xml              # App metadata and device compatibility
-├── monkey.jungle             # Build configuration
+├── manifest.xml              # Device compatibility and App ID
+├── monkey.jungle             # Build instructions
 ├── resources/
-│   ├── strings.xml          # UI strings
-│   ├── properties.xml       # Default settings
-│   └── settings.xml         # Settings configuration
+│   ├── strings.xml           # Localized strings (Multi-language format)
+│   ├── drawables.xml         # Image and icon definitions
+│   ├── settings.xml          # App settings UI
+│   └── launcher_icon.png     # Optimized 40x40 icon
 └── source/
-    ├── SwimSetApp.mc        # Main app entry point
-    ├── SwimSetView.mc       # UI and timer logic
-    └── SwimSetDelegate.mc   # Input handling
+    ├── SwimSetApp.mc         # App entry and L() localization helper
+    ├── SwimSetView.mc        # Main timer display and logic
+    ├── SwimSetDelegate.mc    # "Swim Mode" input handling
+    └── SettingsMenuDelegate.mc # Settings and menu management
 ```
-
-## Development
-
-To modify the app:
-1. Edit source files in `source/` directory
-2. Rebuild with `monkeyc` command
-3. Test in simulator or on device
 
 ## License
 
-MIT
+This project is open-source under the MIT License.
