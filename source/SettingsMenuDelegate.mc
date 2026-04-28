@@ -40,6 +40,9 @@ class SwimSetSettingsDelegate extends WatchUi.Menu2InputDelegate {
             pushOptions(L(Rez.Strings.Alarm10), "Enable10SecAlarm", [0, 1], [L(Rez.Strings.Off), L(Rez.Strings.On)], item);
         } else if (idx == :appLang) {
             pushOptions(L(Rez.Strings.AppLang), "AppLanguage", [-1, 0, 1, 2], [L(Rez.Strings.LangAuto), L(Rez.Strings.LangEN), L(Rez.Strings.LangZH), L(Rez.Strings.LangJA)], item);
+        } else if (idx == :appVersion) {
+            _mainView.focusSettingsInMainMenu();
+            WatchUi.popView(WatchUi.SLIDE_RIGHT);
         }
     }
 
@@ -126,6 +129,7 @@ function buildSettingsMenu(mainView) {
     menu.addItem(new WatchUi.MenuItem(L(Rez.Strings.Alarm20),  rd.alarmLabel("Enable20SecAlarm"),  :alarm20,  {}));
     menu.addItem(new WatchUi.MenuItem(L(Rez.Strings.Alarm10),  rd.alarmLabel("Enable10SecAlarm"),  :alarm10,  {}));
     menu.addItem(new WatchUi.MenuItem(L(Rez.Strings.AppLang),  rd.langLabel(),                     :appLang,  {}));
+    menu.addItem(new WatchUi.MenuItem(L(Rez.Strings.Version),  L(Rez.Strings.AppVersion),          :appVersion, {}));
 
     WatchUi.pushView(menu, new SwimSetSettingsDelegate(mainView), WatchUi.SLIDE_LEFT);
 }

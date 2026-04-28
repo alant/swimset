@@ -29,6 +29,7 @@ class SwimSetView extends WatchUi.View {
     private var _10secTriggered = false;
     private var _session;
     private var _hasStarted = false;
+    private var _mainMenu;
 
     function initialize() {
         View.initialize();
@@ -192,22 +193,28 @@ class SwimSetView extends WatchUi.View {
     }
 
     function showMainMenu() {
-        var menu = new WatchUi.Menu2({:title => L(Rez.Strings.Options)});
+        _mainMenu = new WatchUi.Menu2({:title => L(Rez.Strings.Options)});
 
         if (!_hasStarted) {
-            menu.addItem(new WatchUi.MenuItem(L(Rez.Strings.Start), null, :start, {}));
-            menu.addItem(new WatchUi.MenuItem(L(Rez.Strings.Settings),    null, :settings, {}));
+            _mainMenu.addItem(new WatchUi.MenuItem(L(Rez.Strings.Start), null, :start, {}));
+            _mainMenu.addItem(new WatchUi.MenuItem(L(Rez.Strings.Settings),    null, :settings, {}));
         } else {
             if (_paused) {
-                menu.addItem(new WatchUi.MenuItem(L(Rez.Strings.Resume), null, :resume, {}));
+                _mainMenu.addItem(new WatchUi.MenuItem(L(Rez.Strings.Resume), null, :resume, {}));
             } else {
-                menu.addItem(new WatchUi.MenuItem(L(Rez.Strings.Pause), null, :pause, {}));
+                _mainMenu.addItem(new WatchUi.MenuItem(L(Rez.Strings.Pause), null, :pause, {}));
             }
-            menu.addItem(new WatchUi.MenuItem(L(Rez.Strings.Save),    null, :save, {}));
-            menu.addItem(new WatchUi.MenuItem(L(Rez.Strings.Discard), null, :discard, {}));
+            _mainMenu.addItem(new WatchUi.MenuItem(L(Rez.Strings.Save),    null, :save, {}));
+            _mainMenu.addItem(new WatchUi.MenuItem(L(Rez.Strings.Discard), null, :discard, {}));
         }
 
-        WatchUi.pushView(menu, new MainMenuDelegate(self), WatchUi.SLIDE_LEFT);
+        WatchUi.pushView(_mainMenu, new MainMenuDelegate(self), WatchUi.SLIDE_LEFT);
+    }
+
+    function focusSettingsInMainMenu() {
+        if (_mainMenu != null && !_hasStarted) {
+            _mainMenu.setFocus(1);
+        }
     }
 
     function showSettingsMenu() {
