@@ -20,6 +20,7 @@ class SwimSetView extends WatchUi.View {
     private var _setTimeSeconds;
     private var _poolSize;
     private var _poolUnit;
+    private var _lapsPerSet;
     private var _enable30SecAlarm;
     private var _enable20SecAlarm;
     private var _enable10SecAlarm;
@@ -42,8 +43,9 @@ class SwimSetView extends WatchUi.View {
     function loadSettings() {
         _poolSize    = storedOr("PoolSize",             Application.Properties.getValue("PoolSize"),             25);
         _poolUnit    = storedOr("PoolUnit",             Application.Properties.getValue("PoolUnit"),             0);
+        _lapsPerSet  = storedOr("LapsPerSet",           Application.Properties.getValue("LapsPerSet"),           2);
         var mins     = storedOr("SetTimeMinutes",       Application.Properties.getValue("SetTimeMinutes"),       1);
-        var secs     = storedOr("SetTimeSeconds",       Application.Properties.getValue("SetTimeSeconds"),       50);
+        var secs     = storedOr("SetTimeSeconds",       Application.Properties.getValue("SetTimeSeconds"),       30);
         _setTimeSeconds = (mins * 60) + secs;
         _totalSets   = storedOr("NumSets",              Application.Properties.getValue("NumSets"),              8);
         _enable30SecAlarm = storedOr("Enable30SecAlarm", Application.Properties.getValue("Enable30SecAlarm"), 1) != 0;
@@ -78,7 +80,7 @@ class SwimSetView extends WatchUi.View {
         var timeStr = minutes.format("%02d") + ":" + seconds.format("%02d");
 
         var unitStr = _poolUnit == 0 ? L(Rez.Strings.Yds) : L(Rez.Strings.M);
-        var totalDist = _currentSet * (_poolSize * 2);
+        var totalDist = _currentSet * (_poolSize * _lapsPerSet);
 
         dc.drawText(centerX, height * 0.10, Graphics.FONT_SMALL, L(Rez.Strings.Set) + " " + _currentSet + " / " + _totalSets, Graphics.TEXT_JUSTIFY_CENTER);
         dc.drawText(centerX, height * 0.22, Graphics.FONT_SMALL, totalDist + " " + unitStr, Graphics.TEXT_JUSTIFY_CENTER);

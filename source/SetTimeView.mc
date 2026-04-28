@@ -191,9 +191,8 @@ class SetTimeDelegate extends WatchUi.BehaviorDelegate {
             } else {
                 _view.focusSeconds();
             }
-            return true;
         }
-        return false;
+        return true;
     }
 
     function onSelect() {

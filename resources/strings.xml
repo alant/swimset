@@ -13,6 +13,7 @@
 
     <string id="PoolSize">Pool Size|泳池长度|プールサイズ</string>
     <string id="PoolUnit">Pool Unit|单位|単位</string>
+    <string id="LapsPerSet">Lengths/Set|每组趟数|1セットの本数</string>
     <string id="PerSetTime">Per Set Time|每组时间|セット時間</string>
     <string id="Minutes">Minutes|分|分</string>
     <string id="Seconds">Seconds|秒|秒</string>

@@ -2,8 +2,9 @@
 <properties>
     <property id="PoolSize" type="number">25</property>
     <property id="PoolUnit" type="number">1</property>
+    <property id="LapsPerSet" type="number">2</property>
     <property id="SetTimeMinutes" type="number">1</property>
-    <property id="SetTimeSeconds" type="number">50</property>
+    <property id="SetTimeSeconds" type="number">30</property>
     <property id="NumSets" type="number">8</property>
     <property id="Enable30SecAlarm" type="number">1</property>
     <property id="Enable20SecAlarm" type="number">1</property>
