@@ -126,6 +126,7 @@ function buildSettingsMenu(mainView) {
     menu.addItem(new WatchUi.MenuItem(L(Rez.Strings.Alarm20),  rd.alarmLabel("Enable20SecAlarm"),  :alarm20,  {}));
     menu.addItem(new WatchUi.MenuItem(L(Rez.Strings.Alarm10),  rd.alarmLabel("Enable10SecAlarm"),  :alarm10,  {}));
     menu.addItem(new WatchUi.MenuItem(L(Rez.Strings.AppLang),  rd.langLabel(),                     :appLang,  {}));
+    menu.addItem(new WatchUi.MenuItem(L(Rez.Strings.Version),  L(Rez.Strings.AppVersion),          :appVersion, {}));
 
     WatchUi.pushView(menu, new SwimSetSettingsDelegate(mainView), WatchUi.SLIDE_LEFT);
 }
