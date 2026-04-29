@@ -10,9 +10,7 @@ class MainMenuDelegate extends WatchUi.Menu2InputDelegate {
 
     function onSelect(item) {
         var id = item.getId();
-        if (id != :settings) {
-            WatchUi.popView(WatchUi.SLIDE_RIGHT);
-        }
+        WatchUi.popView(WatchUi.SLIDE_RIGHT);
         _view.handleMenuAction(id);
     }
 

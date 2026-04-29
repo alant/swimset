@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<resources xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:noNamespaceSchemaLocation="https://developer.garmin.com/downloads/connect-iq/resources.xsd">
+    <fitContributions>
+        <fitField id="0" dataLabel="@Strings.FitTotalDistance" unitLabel="@Strings.M"
+                  precision="1" sortOrder="0" displayInActivitySummary="true" />
+        <fitField id="1" dataLabel="@Strings.FitTotalLengths" unitLabel="@Strings.UnitCount"
+                  precision="0" sortOrder="1" displayInActivitySummary="true" />
+        <fitField id="2" dataLabel="@Strings.FitTotalSets" unitLabel="@Strings.UnitCount"
+                  precision="0" sortOrder="2" displayInActivitySummary="true" />
+        <fitField id="3" dataLabel="@Strings.FitAvgPace100M" unitLabel="@Strings.UnitSecPer100M"
+                  precision="1" sortOrder="3" displayInActivitySummary="true" />
+        <fitField id="4" dataLabel="@Strings.FitAvgHeartRate" unitLabel="@Strings.UnitBpm"
+                  precision="0" sortOrder="4" displayInActivitySummary="true" />
+
+        <fitField id="10" dataLabel="@Strings.FitLapDistance" unitLabel="@Strings.M"
+                  precision="1" sortOrder="10" displayInActivityLaps="true" />
+        <fitField id="11" dataLabel="@Strings.FitLapLengths" unitLabel="@Strings.UnitCount"
+                  precision="0" sortOrder="11" displayInActivityLaps="true" />
+        <fitField id="12" dataLabel="@Strings.FitLapElapsed" unitLabel="@Strings.UnitSeconds"
+                  precision="0" sortOrder="12" displayInActivityLaps="true" />
+        <fitField id="13" dataLabel="@Strings.FitLapPace100M" unitLabel="@Strings.UnitSecPer100M"
+                  precision="1" sortOrder="13" displayInActivityLaps="true" />
+
+        <fitField id="20" dataLabel="@Strings.FitDistanceChart" unitLabel="@Strings.M"
+                  precision="1" sortOrder="20" displayInChart="true" chartTitle="@Strings.FitDistanceChartTitle" fillColor="#109AD7" />
+    </fitContributions>
+</resources>

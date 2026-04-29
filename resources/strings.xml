@@ -40,8 +40,37 @@
     <string id="LangJA">日本語</string>
 
     <string id="Set">Set|组|セット</string>
+    <string id="Sets">Sets|组数|セット数</string>
+    <string id="Lengths">Lengths|趟数|本数</string>
     <string id="Version">Version|版本|バージョン</string>
     <string id="AppVersion">26.4.4</string>
     <string id="Yds">yds|码|ヤード</string>
     <string id="M">m|米|m</string>
+
+    <string id="WorkoutSaved">Swim Saved!|游泳已保存！|スイム保存完了！</string>
+    <string id="WorkoutComplete">Congratulations!|恭喜完成！|おめでとうございます！</string>
+    <string id="PressToSave">Press to Save|按键保存|押して保存</string>
+    <string id="BackToDiscard">Back to Discard|返回键放弃|戻るで破棄</string>
+    <string id="DiscardConfirm">Discard?|放弃？|破棄？</string>
+    <string id="StartToDiscard">Start|开始键|スタート</string>
+    <string id="BackToCancel">Back|返回键|戻る</string>
+    <string id="TotalTime">Total Time|总时间|合計時間</string>
+    <string id="TotalDistance">Total Distance|总距离|合計距離</string>
+    <string id="AvgPace">Avg Pace|平均配速|平均ペース</string>
+    <string id="AvgHR">Avg HR|平均心率|平均心拍数</string>
+    <string id="FitTotalDistance">Recorded Distance|记录距离|記録距離</string>
+    <string id="FitTotalLengths">Lengths|趟数|本数</string>
+    <string id="FitTotalSets">Completed Sets|完成组数|完了セット数</string>
+    <string id="FitAvgPace100M">Avg Pace /100m|平均配速|平均ペース</string>
+    <string id="FitAvgHeartRate">Avg Heart Rate|平均心率|平均心拍数</string>
+    <string id="FitLapDistance">Set Distance|组距离|セット距離</string>
+    <string id="FitLapLengths">Lengths / Set|每组趟数|1セットの本数</string>
+    <string id="FitLapElapsed">Set Time|组时间|セット時間</string>
+    <string id="FitLapPace100M">Set Pace /100m|组配速|セットペース</string>
+    <string id="FitDistanceChart">Distance|距离|距離</string>
+    <string id="FitDistanceChartTitle">Distance Trend|距离趋势|距離推移</string>
+    <string id="UnitCount">count|次|回</string>
+    <string id="UnitSeconds">s|秒|秒</string>
+    <string id="UnitBpm">bpm|次/分|bpm</string>
+    <string id="UnitSecPer100M">sec/100m</string>
 </resources>
