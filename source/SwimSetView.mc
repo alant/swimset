@@ -244,12 +244,6 @@ class SwimSetView extends WatchUi.View {
         _navTimer.start(method(:showMainMenu), 200, false);
     }
 
-    function focusSettingsInMainMenu() {
-        if (_mainMenu != null && !_hasStarted) {
-            _mainMenu.setFocus(1);
-        }
-    }
-
     function showSettingsMenu() {
         buildSettingsMenu(self);
     }
@@ -494,7 +488,7 @@ class SwimSetView extends WatchUi.View {
     }
 
     private function currentSetDisplayLengths() {
-        if (_hasStarted) {
+        if (_hasStarted && _completedSets < _totalSets) {
             return _lapsPerSet;
         }
         return 0;
