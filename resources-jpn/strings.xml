@@ -17,6 +17,6 @@
     <string id="UnitBpm">bpm</string>
     <string id="UnitSecPer100M">秒/100m</string>
     <string id="UnitSecPer100Yd">秒/100yd</string>
-    <string id="FitUnitDist">yd</string>
-    <string id="FitUnitPace">秒/100yd</string>
+    <string id="FitUnitDist">m</string>
+    <string id="FitUnitPace">秒/100m</string>
 </resources>

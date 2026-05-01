@@ -589,22 +589,19 @@ class SwimSetView extends WatchUi.View {
             return;
         }
 
-        var distUnit = _poolUnit == 0 ? "yd" : "m";
-        var paceUnit = _poolUnit == 0 ? "sec/100yd" : "sec/100m";
-
         try {
-            _sessionDistanceField = _session.createField("TotalDistance", 0, FitContributor.DATA_TYPE_FLOAT, {:mesgType => FitContributor.MESG_TYPE_SESSION, :units => distUnit});
+            _sessionDistanceField = _session.createField("TotalDistanceM", 0, FitContributor.DATA_TYPE_FLOAT, {:mesgType => FitContributor.MESG_TYPE_SESSION, :units => "m"});
             _sessionLengthsField = _session.createField("TotalLengths", 1, FitContributor.DATA_TYPE_UINT16, {:mesgType => FitContributor.MESG_TYPE_SESSION, :units => "count"});
             _sessionSetsField = _session.createField("TotalSets", 2, FitContributor.DATA_TYPE_UINT16, {:mesgType => FitContributor.MESG_TYPE_SESSION, :units => "count"});
-            _sessionPaceField = _session.createField("AvgPace", 3, FitContributor.DATA_TYPE_FLOAT, {:mesgType => FitContributor.MESG_TYPE_SESSION, :units => paceUnit});
+            _sessionPaceField = _session.createField("AvgPace100M", 3, FitContributor.DATA_TYPE_FLOAT, {:mesgType => FitContributor.MESG_TYPE_SESSION, :units => "sec/100m"});
             _sessionHrField = _session.createField("AvgHeartRate", 4, FitContributor.DATA_TYPE_UINT8, {:mesgType => FitContributor.MESG_TYPE_SESSION, :units => "bpm"});
 
-            _lapDistanceField = _session.createField("LapDistance", 10, FitContributor.DATA_TYPE_FLOAT, {:mesgType => FitContributor.MESG_TYPE_LAP, :units => distUnit});
+            _lapDistanceField = _session.createField("LapDistanceM", 10, FitContributor.DATA_TYPE_FLOAT, {:mesgType => FitContributor.MESG_TYPE_LAP, :units => "m"});
             _lapLengthsField = _session.createField("LapLengths", 11, FitContributor.DATA_TYPE_UINT16, {:mesgType => FitContributor.MESG_TYPE_LAP, :units => "count"});
             _lapElapsedField = _session.createField("LapElapsedSec", 12, FitContributor.DATA_TYPE_UINT32, {:mesgType => FitContributor.MESG_TYPE_LAP, :units => "s"});
-            _lapPaceField = _session.createField("LapPace", 13, FitContributor.DATA_TYPE_FLOAT, {:mesgType => FitContributor.MESG_TYPE_LAP, :units => paceUnit});
+            _lapPaceField = _session.createField("LapPace100M", 13, FitContributor.DATA_TYPE_FLOAT, {:mesgType => FitContributor.MESG_TYPE_LAP, :units => "sec/100m"});
 
-            _recordDistanceField = _session.createField("EstimatedDistance", 20, FitContributor.DATA_TYPE_FLOAT, {:mesgType => FitContributor.MESG_TYPE_RECORD, :units => distUnit});
+            _recordDistanceField = _session.createField("EstimatedDistanceM", 20, FitContributor.DATA_TYPE_FLOAT, {:mesgType => FitContributor.MESG_TYPE_RECORD, :units => "m"});
         } catch (ex) {
             System.println("Create FIT fields failed");
             clearFitFields();
@@ -612,7 +609,7 @@ class SwimSetView extends WatchUi.View {
     }
 
     private function updateSessionFitFields(totalTime) {
-        var totalDistance = getEstimatedDistanceNative();
+        var totalDistance = getEstimatedDistanceMeters();
         var avgPace = computePacePer100M(totalTime, totalDistance);
 
         if (_sessionDistanceField != null) { _sessionDistanceField.setData(totalDistance); }
@@ -623,7 +620,7 @@ class SwimSetView extends WatchUi.View {
     }
 
     private function updateLapFitFields(lapElapsedSeconds) {
-        var lapDistance = getLapDistanceNative();
+        var lapDistance = _lapsPerSet.toFloat() * getPoolLengthMeters();
         var lapPace = computePacePer100M(lapElapsedSeconds, lapDistance);
 
         if (_lapDistanceField != null) { _lapDistanceField.setData(lapDistance); }
@@ -634,7 +631,7 @@ class SwimSetView extends WatchUi.View {
 
     private function updateRecordFitFields() {
         if (_recordDistanceField != null) {
-            _recordDistanceField.setData(getEstimatedDistanceNative());
+            _recordDistanceField.setData(getEstimatedDistanceMeters());
         }
     }
 }
