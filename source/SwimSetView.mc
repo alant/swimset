@@ -114,14 +114,20 @@ class SwimSetView extends WatchUi.View {
         var totalDist = (_completedLengths + currentSetDisplayLengths()) * _poolSize;
 
         var setLabel = L(Rez.Strings.Set) + " ";
-        var setNums = _currentSet + " / " + _totalSets;
-        var labelWidth = dc.getTextWidthInPixels(setLabel, Graphics.FONT_MEDIUM);
-        var numsWidth = dc.getTextWidthInPixels(setNums, Graphics.FONT_NUMBER_MEDIUM);
-        var startX = centerX - (labelWidth + numsWidth) / 2;
-        var numsY = height * 0.04;
-        var labelY = numsY + (dc.getFontHeight(Graphics.FONT_NUMBER_MEDIUM) - dc.getFontHeight(Graphics.FONT_MEDIUM)) * 3 / 4;
-        dc.drawText(startX, labelY, Graphics.FONT_MEDIUM, setLabel, Graphics.TEXT_JUSTIFY_LEFT);
-        dc.drawText(startX + labelWidth, numsY, Graphics.FONT_NUMBER_MEDIUM, setNums, Graphics.TEXT_JUSTIFY_LEFT);
+        var setCurrent = _currentSet.format("%d");
+        var setSep = " / ";
+        var setTotal = _totalSets.format("%d");
+        var labelWidth   = dc.getTextWidthInPixels(setLabel,   Graphics.FONT_MEDIUM);
+        var currentWidth = dc.getTextWidthInPixels(setCurrent, Graphics.FONT_NUMBER_MEDIUM);
+        var sepWidth     = dc.getTextWidthInPixels(setSep,     Graphics.FONT_MEDIUM);
+        var totalWidth   = dc.getTextWidthInPixels(setTotal,   Graphics.FONT_NUMBER_MEDIUM);
+        var startX = centerX - (labelWidth + currentWidth + sepWidth + totalWidth) / 2;
+        var numsY  = height * 0.04;
+        var baseY  = numsY + (dc.getFontHeight(Graphics.FONT_NUMBER_MEDIUM) - dc.getFontHeight(Graphics.FONT_MEDIUM)) * 3 / 4;
+        dc.drawText(startX,                                        baseY,  Graphics.FONT_MEDIUM,        setLabel,   Graphics.TEXT_JUSTIFY_LEFT);
+        dc.drawText(startX + labelWidth,                           numsY,  Graphics.FONT_NUMBER_MEDIUM, setCurrent, Graphics.TEXT_JUSTIFY_LEFT);
+        dc.drawText(startX + labelWidth + currentWidth,            baseY,  Graphics.FONT_MEDIUM,        setSep,     Graphics.TEXT_JUSTIFY_LEFT);
+        dc.drawText(startX + labelWidth + currentWidth + sepWidth, numsY,  Graphics.FONT_NUMBER_MEDIUM, setTotal,   Graphics.TEXT_JUSTIFY_LEFT);
         dc.drawText(centerX, height * 0.29, Graphics.FONT_SMALL, totalDist + " " + unitStr, Graphics.TEXT_JUSTIFY_CENTER);
         dc.drawText(centerX, height * 0.38, Graphics.FONT_NUMBER_HOT, timeStr, Graphics.TEXT_JUSTIFY_CENTER);
 
@@ -514,14 +520,6 @@ class SwimSetView extends WatchUi.View {
 
     private function getEstimatedDistanceMeters() {
         return _completedLengths.toFloat() * getPoolLengthMeters();
-    }
-
-    private function getEstimatedDistanceNative() {
-        return _completedLengths.toFloat() * _poolSize.toFloat();
-    }
-
-    private function getLapDistanceNative() {
-        return _lapsPerSet.toFloat() * _poolSize.toFloat();
     }
 
     private function metersToDisplayDistance(distanceM) {
