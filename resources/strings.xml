@@ -43,7 +43,7 @@
     <string id="Sets">Sets|组数|セット数</string>
     <string id="Lengths">Lengths|趟数|本数</string>
     <string id="Version">Version|版本|バージョン</string>
-    <string id="AppVersion">26.4.5</string>
+    <string id="AppVersion">26.4.6</string>
     <string id="Yds">yds|码|ヤード</string>
     <string id="M">m|米|m</string>
 
@@ -73,4 +73,7 @@
     <string id="UnitSeconds">s|秒|秒</string>
     <string id="UnitBpm">bpm|次/分|bpm</string>
     <string id="UnitSecPer100M">sec/100m</string>
+    <string id="UnitSecPer100Yd">sec/100yd</string>
+    <string id="FitUnitDist">m</string>
+    <string id="FitUnitPace">sec/100m</string>
 </resources>

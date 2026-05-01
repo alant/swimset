@@ -1,4 +1,22 @@
 <?xml version="1.0"?>
 <resources>
-    <string id="AppName">游泳训练</string>
+    <string id="AppName">包干游泳训练</string>
+    <string id="FitTotalDistance">记录距离</string>
+    <string id="FitTotalLengths">趟数</string>
+    <string id="FitTotalSets">完成组数</string>
+    <string id="FitAvgPace100M">平均配速</string>
+    <string id="FitAvgHeartRate">平均心率</string>
+    <string id="FitLapDistance">组距离</string>
+    <string id="FitLapLengths">每组趟数</string>
+    <string id="FitLapElapsed">组时间</string>
+    <string id="FitLapPace100M">组配速</string>
+    <string id="FitDistanceChart">距离</string>
+    <string id="FitDistanceChartTitle">距离趋势</string>
+    <string id="UnitCount">次</string>
+    <string id="UnitSeconds">秒</string>
+    <string id="UnitBpm">次/分</string>
+    <string id="UnitSecPer100M">秒/100m</string>
+    <string id="UnitSecPer100Yd">秒/100yd</string>
+    <string id="FitUnitDist">yd</string>
+    <string id="FitUnitPace">秒/100yd</string>
 </resources>

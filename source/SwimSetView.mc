@@ -112,14 +112,24 @@ class SwimSetView extends WatchUi.View {
         var unitStr = _poolUnit == 0 ? L(Rez.Strings.Yds) : L(Rez.Strings.M);
         var totalDist = (_completedLengths + currentSetDisplayLengths()) * _poolSize;
 
-        dc.drawText(centerX, height * 0.10, Graphics.FONT_SMALL, L(Rez.Strings.Set) + " " + _currentSet + " / " + _totalSets, Graphics.TEXT_JUSTIFY_CENTER);
-        dc.drawText(centerX, height * 0.22, Graphics.FONT_SMALL, totalDist + " " + unitStr, Graphics.TEXT_JUSTIFY_CENTER);
+        var setLabel = L(Rez.Strings.Set) + " ";
+        var setNums = _currentSet + " / " + _totalSets;
+        var labelWidth = dc.getTextWidthInPixels(setLabel, Graphics.FONT_MEDIUM);
+        var numsWidth = dc.getTextWidthInPixels(setNums, Graphics.FONT_NUMBER_MEDIUM);
+        var startX = centerX - (labelWidth + numsWidth) / 2;
+        var numsY = height * 0.04;
+        var labelY = numsY + (dc.getFontHeight(Graphics.FONT_NUMBER_MEDIUM) - dc.getFontHeight(Graphics.FONT_MEDIUM)) * 3 / 4;
+        dc.drawText(startX, labelY, Graphics.FONT_MEDIUM, setLabel, Graphics.TEXT_JUSTIFY_LEFT);
+        dc.drawText(startX + labelWidth, numsY, Graphics.FONT_NUMBER_MEDIUM, setNums, Graphics.TEXT_JUSTIFY_LEFT);
+        dc.drawText(centerX, height * 0.29, Graphics.FONT_SMALL, totalDist + " " + unitStr, Graphics.TEXT_JUSTIFY_CENTER);
         dc.drawText(centerX, height * 0.38, Graphics.FONT_NUMBER_HOT, timeStr, Graphics.TEXT_JUSTIFY_CENTER);
 
         refreshActivitySnapshots();
         if (_lastKnownCurrentHeartRate != null) {
             var hrStr = _lastKnownCurrentHeartRate.format("%d") + " bpm";
+            dc.setColor(heartRateColor(_lastKnownCurrentHeartRate), Graphics.COLOR_TRANSPARENT);
             dc.drawText(centerX, height * 0.7, Graphics.FONT_SMALL, hrStr, Graphics.TEXT_JUSTIFY_CENTER);
+            dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
         }
 
         var statusStr = "";
@@ -505,6 +515,14 @@ class SwimSetView extends WatchUi.View {
         return _completedLengths.toFloat() * getPoolLengthMeters();
     }
 
+    private function getEstimatedDistanceNative() {
+        return _completedLengths.toFloat() * _poolSize.toFloat();
+    }
+
+    private function getLapDistanceNative() {
+        return _lapsPerSet.toFloat() * _poolSize.toFloat();
+    }
+
     private function metersToDisplayDistance(distanceM) {
         if (_poolUnit == 0) {
             return (distanceM / 0.9144 + 0.5).toNumber();
@@ -528,6 +546,14 @@ class SwimSetView extends WatchUi.View {
             return (totalTimeSec.toFloat() / distanceM.toFloat()) * 100.0;
         }
         return 0.0;
+    }
+
+    private function heartRateColor(hr) {
+        if (hr > 159)       { return Graphics.COLOR_RED; }
+        else if (hr >= 142) { return Graphics.COLOR_ORANGE; }
+        else if (hr >= 125) { return Graphics.COLOR_GREEN; }
+        else if (hr >= 107) { return Graphics.COLOR_BLUE; }
+        return Graphics.COLOR_WHITE;
     }
 
     private function refreshActivitySnapshots() {
@@ -563,19 +589,22 @@ class SwimSetView extends WatchUi.View {
             return;
         }
 
+        var distUnit = _poolUnit == 0 ? "yd" : "m";
+        var paceUnit = _poolUnit == 0 ? "sec/100yd" : "sec/100m";
+
         try {
-            _sessionDistanceField = _session.createField("TotalDistanceM", 0, FitContributor.DATA_TYPE_FLOAT, {:mesgType => FitContributor.MESG_TYPE_SESSION, :units => "m"});
+            _sessionDistanceField = _session.createField("TotalDistance", 0, FitContributor.DATA_TYPE_FLOAT, {:mesgType => FitContributor.MESG_TYPE_SESSION, :units => distUnit});
             _sessionLengthsField = _session.createField("TotalLengths", 1, FitContributor.DATA_TYPE_UINT16, {:mesgType => FitContributor.MESG_TYPE_SESSION, :units => "count"});
             _sessionSetsField = _session.createField("TotalSets", 2, FitContributor.DATA_TYPE_UINT16, {:mesgType => FitContributor.MESG_TYPE_SESSION, :units => "count"});
-            _sessionPaceField = _session.createField("AvgPace100M", 3, FitContributor.DATA_TYPE_FLOAT, {:mesgType => FitContributor.MESG_TYPE_SESSION, :units => "sec/100m"});
+            _sessionPaceField = _session.createField("AvgPace", 3, FitContributor.DATA_TYPE_FLOAT, {:mesgType => FitContributor.MESG_TYPE_SESSION, :units => paceUnit});
             _sessionHrField = _session.createField("AvgHeartRate", 4, FitContributor.DATA_TYPE_UINT8, {:mesgType => FitContributor.MESG_TYPE_SESSION, :units => "bpm"});
 
-            _lapDistanceField = _session.createField("LapDistanceM", 10, FitContributor.DATA_TYPE_FLOAT, {:mesgType => FitContributor.MESG_TYPE_LAP, :units => "m"});
+            _lapDistanceField = _session.createField("LapDistance", 10, FitContributor.DATA_TYPE_FLOAT, {:mesgType => FitContributor.MESG_TYPE_LAP, :units => distUnit});
             _lapLengthsField = _session.createField("LapLengths", 11, FitContributor.DATA_TYPE_UINT16, {:mesgType => FitContributor.MESG_TYPE_LAP, :units => "count"});
             _lapElapsedField = _session.createField("LapElapsedSec", 12, FitContributor.DATA_TYPE_UINT32, {:mesgType => FitContributor.MESG_TYPE_LAP, :units => "s"});
-            _lapPaceField = _session.createField("LapPace100M", 13, FitContributor.DATA_TYPE_FLOAT, {:mesgType => FitContributor.MESG_TYPE_LAP, :units => "sec/100m"});
+            _lapPaceField = _session.createField("LapPace", 13, FitContributor.DATA_TYPE_FLOAT, {:mesgType => FitContributor.MESG_TYPE_LAP, :units => paceUnit});
 
-            _recordDistanceField = _session.createField("EstimatedDistanceM", 20, FitContributor.DATA_TYPE_FLOAT, {:mesgType => FitContributor.MESG_TYPE_RECORD, :units => "m"});
+            _recordDistanceField = _session.createField("EstimatedDistance", 20, FitContributor.DATA_TYPE_FLOAT, {:mesgType => FitContributor.MESG_TYPE_RECORD, :units => distUnit});
         } catch (ex) {
             System.println("Create FIT fields failed");
             clearFitFields();
@@ -583,10 +612,10 @@ class SwimSetView extends WatchUi.View {
     }
 
     private function updateSessionFitFields(totalTime) {
-        var totalDistanceM = getEstimatedDistanceMeters();
-        var avgPace = computePacePer100M(totalTime, totalDistanceM);
+        var totalDistance = getEstimatedDistanceNative();
+        var avgPace = computePacePer100M(totalTime, totalDistance);
 
-        if (_sessionDistanceField != null) { _sessionDistanceField.setData(totalDistanceM); }
+        if (_sessionDistanceField != null) { _sessionDistanceField.setData(totalDistance); }
         if (_sessionLengthsField != null) { _sessionLengthsField.setData(_completedLengths); }
         if (_sessionSetsField != null) { _sessionSetsField.setData(_completedSets); }
         if (_sessionPaceField != null) { _sessionPaceField.setData(avgPace); }
@@ -594,10 +623,10 @@ class SwimSetView extends WatchUi.View {
     }
 
     private function updateLapFitFields(lapElapsedSeconds) {
-        var lapDistanceM = _lapsPerSet.toFloat() * getPoolLengthMeters();
-        var lapPace = computePacePer100M(lapElapsedSeconds, lapDistanceM);
+        var lapDistance = getLapDistanceNative();
+        var lapPace = computePacePer100M(lapElapsedSeconds, lapDistance);
 
-        if (_lapDistanceField != null) { _lapDistanceField.setData(lapDistanceM); }
+        if (_lapDistanceField != null) { _lapDistanceField.setData(lapDistance); }
         if (_lapLengthsField != null) { _lapLengthsField.setData(_lapsPerSet); }
         if (_lapElapsedField != null) { _lapElapsedField.setData(lapElapsedSeconds); }
         if (_lapPaceField != null) { _lapPaceField.setData(lapPace); }
@@ -605,7 +634,7 @@ class SwimSetView extends WatchUi.View {
 
     private function updateRecordFitFields() {
         if (_recordDistanceField != null) {
-            _recordDistanceField.setData(getEstimatedDistanceMeters());
+            _recordDistanceField.setData(getEstimatedDistanceNative());
         }
     }
 }
