@@ -1,4 +1,22 @@
 <?xml version="1.0"?>
 <resources>
     <string id="AppName">Swim Set</string>
+    <string id="FitTotalDistance">Recorded Distance</string>
+    <string id="FitTotalLengths">Lengths</string>
+    <string id="FitTotalSets">Completed Sets</string>
+    <string id="FitAvgPace100M">Avg Pace</string>
+    <string id="FitAvgHeartRate">Avg Heart Rate</string>
+    <string id="FitLapDistance">Set Distance</string>
+    <string id="FitLapLengths">Lengths / Set</string>
+    <string id="FitLapElapsed">Set Time</string>
+    <string id="FitLapPace100M">Set Pace</string>
+    <string id="FitDistanceChart">Distance</string>
+    <string id="FitDistanceChartTitle">Distance Trend</string>
+    <string id="UnitCount">count</string>
+    <string id="UnitSeconds">s</string>
+    <string id="UnitBpm">bpm</string>
+    <string id="UnitSecPer100M">sec/100m</string>
+    <string id="UnitSecPer100Yd">sec/100yd</string>
+    <string id="FitUnitDist">m</string>
+    <string id="FitUnitPace">sec/100m</string>
 </resources>

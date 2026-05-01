@@ -8,6 +8,7 @@ using Toybox.Activity;
 using Toybox.Application;
 using Toybox.Time;
 using Toybox.FitContributor;
+using Toybox.UserProfile;
 
 class SwimSetView extends WatchUi.View {
     private var _timer;
@@ -112,14 +113,30 @@ class SwimSetView extends WatchUi.View {
         var unitStr = _poolUnit == 0 ? L(Rez.Strings.Yds) : L(Rez.Strings.M);
         var totalDist = (_completedLengths + currentSetDisplayLengths()) * _poolSize;
 
-        dc.drawText(centerX, height * 0.10, Graphics.FONT_SMALL, L(Rez.Strings.Set) + " " + _currentSet + " / " + _totalSets, Graphics.TEXT_JUSTIFY_CENTER);
-        dc.drawText(centerX, height * 0.22, Graphics.FONT_SMALL, totalDist + " " + unitStr, Graphics.TEXT_JUSTIFY_CENTER);
+        var setLabel = L(Rez.Strings.Set) + " ";
+        var setCurrent = _currentSet.format("%d");
+        var setSep = " / ";
+        var setTotal = _totalSets.format("%d");
+        var labelWidth   = dc.getTextWidthInPixels(setLabel,   Graphics.FONT_MEDIUM);
+        var currentWidth = dc.getTextWidthInPixels(setCurrent, Graphics.FONT_NUMBER_MEDIUM);
+        var sepWidth     = dc.getTextWidthInPixels(setSep,     Graphics.FONT_MEDIUM);
+        var totalWidth   = dc.getTextWidthInPixels(setTotal,   Graphics.FONT_NUMBER_MEDIUM);
+        var startX = centerX - (labelWidth + currentWidth + sepWidth + totalWidth) / 2;
+        var numsY  = height * 0.04;
+        var baseY  = numsY + (dc.getFontHeight(Graphics.FONT_NUMBER_MEDIUM) - dc.getFontHeight(Graphics.FONT_MEDIUM)) * 3 / 4;
+        dc.drawText(startX,                                        baseY,  Graphics.FONT_MEDIUM,        setLabel,   Graphics.TEXT_JUSTIFY_LEFT);
+        dc.drawText(startX + labelWidth,                           numsY,  Graphics.FONT_NUMBER_MEDIUM, setCurrent, Graphics.TEXT_JUSTIFY_LEFT);
+        dc.drawText(startX + labelWidth + currentWidth,            baseY,  Graphics.FONT_MEDIUM,        setSep,     Graphics.TEXT_JUSTIFY_LEFT);
+        dc.drawText(startX + labelWidth + currentWidth + sepWidth, numsY,  Graphics.FONT_NUMBER_MEDIUM, setTotal,   Graphics.TEXT_JUSTIFY_LEFT);
+        dc.drawText(centerX, height * 0.29, Graphics.FONT_SMALL, totalDist + " " + unitStr, Graphics.TEXT_JUSTIFY_CENTER);
         dc.drawText(centerX, height * 0.38, Graphics.FONT_NUMBER_HOT, timeStr, Graphics.TEXT_JUSTIFY_CENTER);
 
         refreshActivitySnapshots();
         if (_lastKnownCurrentHeartRate != null) {
             var hrStr = _lastKnownCurrentHeartRate.format("%d") + " bpm";
+            dc.setColor(heartRateColor(_lastKnownCurrentHeartRate), Graphics.COLOR_TRANSPARENT);
             dc.drawText(centerX, height * 0.7, Graphics.FONT_SMALL, hrStr, Graphics.TEXT_JUSTIFY_CENTER);
+            dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
         }
 
         var statusStr = "";
@@ -530,6 +547,27 @@ class SwimSetView extends WatchUi.View {
         return 0.0;
     }
 
+    private function heartRateColor(hr) {
+        if (UserProfile has :getHeartRateZones) {
+            var sport = (UserProfile has :HR_ZONE_SPORT_SWIMMING)
+                ? UserProfile.HR_ZONE_SPORT_SWIMMING
+                : UserProfile.HR_ZONE_SPORT_GENERIC;
+            var zones = UserProfile.getHeartRateZones(sport);
+            if (zones != null && zones.size() >= 5) {
+                if (hr >= zones[4])      { return Graphics.COLOR_RED; }
+                else if (hr >= zones[3]) { return Graphics.COLOR_ORANGE; }
+                else if (hr >= zones[2]) { return Graphics.COLOR_GREEN; }
+                else if (hr >= zones[1]) { return Graphics.COLOR_BLUE; }
+                return Graphics.COLOR_WHITE;
+            }
+        }
+        if (hr > 159)       { return Graphics.COLOR_RED; }
+        else if (hr >= 142) { return Graphics.COLOR_ORANGE; }
+        else if (hr >= 125) { return Graphics.COLOR_GREEN; }
+        else if (hr >= 107) { return Graphics.COLOR_BLUE; }
+        return Graphics.COLOR_WHITE;
+    }
+
     private function refreshActivitySnapshots() {
         if (Activity has :getActivityInfo) {
             var info = Activity.getActivityInfo();
@@ -583,10 +621,10 @@ class SwimSetView extends WatchUi.View {
     }
 
     private function updateSessionFitFields(totalTime) {
-        var totalDistanceM = getEstimatedDistanceMeters();
-        var avgPace = computePacePer100M(totalTime, totalDistanceM);
+        var totalDistance = getEstimatedDistanceMeters();
+        var avgPace = computePacePer100M(totalTime, totalDistance);
 
-        if (_sessionDistanceField != null) { _sessionDistanceField.setData(totalDistanceM); }
+        if (_sessionDistanceField != null) { _sessionDistanceField.setData(totalDistance); }
         if (_sessionLengthsField != null) { _sessionLengthsField.setData(_completedLengths); }
         if (_sessionSetsField != null) { _sessionSetsField.setData(_completedSets); }
         if (_sessionPaceField != null) { _sessionPaceField.setData(avgPace); }
@@ -594,10 +632,10 @@ class SwimSetView extends WatchUi.View {
     }
 
     private function updateLapFitFields(lapElapsedSeconds) {
-        var lapDistanceM = _lapsPerSet.toFloat() * getPoolLengthMeters();
-        var lapPace = computePacePer100M(lapElapsedSeconds, lapDistanceM);
+        var lapDistance = _lapsPerSet.toFloat() * getPoolLengthMeters();
+        var lapPace = computePacePer100M(lapElapsedSeconds, lapDistance);
 
-        if (_lapDistanceField != null) { _lapDistanceField.setData(lapDistanceM); }
+        if (_lapDistanceField != null) { _lapDistanceField.setData(lapDistance); }
         if (_lapLengthsField != null) { _lapLengthsField.setData(_lapsPerSet); }
         if (_lapElapsedField != null) { _lapElapsedField.setData(lapElapsedSeconds); }
         if (_lapPaceField != null) { _lapPaceField.setData(lapPace); }

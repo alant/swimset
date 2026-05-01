@@ -1,4 +1,22 @@
 <?xml version="1.0"?>
 <resources>
     <string id="AppName">水泳タイマー</string>
+    <string id="FitTotalDistance">記録距離</string>
+    <string id="FitTotalLengths">本数</string>
+    <string id="FitTotalSets">完了セット数</string>
+    <string id="FitAvgPace100M">平均ペース</string>
+    <string id="FitAvgHeartRate">平均心拍数</string>
+    <string id="FitLapDistance">セット距離</string>
+    <string id="FitLapLengths">1セットの本数</string>
+    <string id="FitLapElapsed">セット時間</string>
+    <string id="FitLapPace100M">セットペース</string>
+    <string id="FitDistanceChart">距離</string>
+    <string id="FitDistanceChartTitle">距離推移</string>
+    <string id="UnitCount">回</string>
+    <string id="UnitSeconds">秒</string>
+    <string id="UnitBpm">bpm</string>
+    <string id="UnitSecPer100M">秒/100m</string>
+    <string id="UnitSecPer100Yd">秒/100yd</string>
+    <string id="FitUnitDist">m</string>
+    <string id="FitUnitPace">秒/100m</string>
 </resources>
