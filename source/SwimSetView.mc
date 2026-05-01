@@ -8,6 +8,7 @@ using Toybox.Activity;
 using Toybox.Application;
 using Toybox.Time;
 using Toybox.FitContributor;
+using Toybox.UserProfile;
 
 class SwimSetView extends WatchUi.View {
     private var _timer;
@@ -549,6 +550,19 @@ class SwimSetView extends WatchUi.View {
     }
 
     private function heartRateColor(hr) {
+        if (UserProfile has :getHeartRateZones) {
+            var sport = (UserProfile has :HR_ZONE_SPORT_SWIMMING)
+                ? UserProfile.HR_ZONE_SPORT_SWIMMING
+                : UserProfile.HR_ZONE_SPORT_GENERIC;
+            var zones = UserProfile.getHeartRateZones(sport);
+            if (zones != null && zones.size() >= 5) {
+                if (hr > zones[3])      { return Graphics.COLOR_RED; }
+                else if (hr > zones[2]) { return Graphics.COLOR_ORANGE; }
+                else if (hr > zones[1]) { return Graphics.COLOR_GREEN; }
+                else if (hr > zones[0]) { return Graphics.COLOR_BLUE; }
+                return Graphics.COLOR_WHITE;
+            }
+        }
         if (hr > 159)       { return Graphics.COLOR_RED; }
         else if (hr >= 142) { return Graphics.COLOR_ORANGE; }
         else if (hr >= 125) { return Graphics.COLOR_GREEN; }
