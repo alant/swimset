@@ -554,10 +554,10 @@ class SwimSetView extends WatchUi.View {
                 : UserProfile.HR_ZONE_SPORT_GENERIC;
             var zones = UserProfile.getHeartRateZones(sport);
             if (zones != null && zones.size() >= 5) {
-                if (hr > zones[3])      { return Graphics.COLOR_RED; }
-                else if (hr > zones[2]) { return Graphics.COLOR_ORANGE; }
-                else if (hr > zones[1]) { return Graphics.COLOR_GREEN; }
-                else if (hr > zones[0]) { return Graphics.COLOR_BLUE; }
+                if (hr >= zones[4])      { return Graphics.COLOR_RED; }
+                else if (hr >= zones[3]) { return Graphics.COLOR_ORANGE; }
+                else if (hr >= zones[2]) { return Graphics.COLOR_GREEN; }
+                else if (hr >= zones[1]) { return Graphics.COLOR_BLUE; }
                 return Graphics.COLOR_WHITE;
             }
         }
