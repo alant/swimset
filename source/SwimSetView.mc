@@ -452,8 +452,12 @@ class SwimSetView extends WatchUi.View {
             if (_session != null) {
                 try {
                     if (_session.isRecording()) {
-                        _session.addLap();
-                        System.println("Lap added");
+                        // addLap() counts as one pool length; call once per length so
+                        // Garmin Connect native distance matches actual lengths swum
+                        for (var i = 0; i < _lapsPerSet; i++) {
+                            _session.addLap();
+                        }
+                        System.println("Laps added: " + _lapsPerSet);
                     }
                 } catch (ex) {
                     System.println("Add lap failed");
