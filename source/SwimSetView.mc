@@ -38,6 +38,7 @@ class SwimSetView extends WatchUi.View {
     private var _totalPausedTime = 0;
     private var _completedSets = 0;
     private var _completedLengths = 0;
+    private var _pendingAddLaps = 0;
     private var _lastKnownAvgHeartRate = null;
     private var _lastKnownCurrentHeartRate = null;
 
@@ -64,6 +65,7 @@ class SwimSetView extends WatchUi.View {
         _totalPausedTime = 0;
         _completedSets = 0;
         _completedLengths = 0;
+        _pendingAddLaps = 0;
         _lastKnownAvgHeartRate = null;
         _lastKnownCurrentHeartRate = null;
         clearFitFields();
@@ -366,6 +368,7 @@ class SwimSetView extends WatchUi.View {
         _totalPausedTime = 0;
         _completedSets = 0;
         _completedLengths = 0;
+        _pendingAddLaps = 0;
         _lastKnownAvgHeartRate = null;
         _lastKnownCurrentHeartRate = null;
         WatchUi.requestUpdate();
@@ -400,6 +403,7 @@ class SwimSetView extends WatchUi.View {
         _totalPausedTime = 0;
         _completedSets = 0;
         _completedLengths = 0;
+        _pendingAddLaps = 0;
         _lastKnownAvgHeartRate = null;
         _lastKnownCurrentHeartRate = null;
         WatchUi.requestUpdate();
@@ -408,6 +412,18 @@ class SwimSetView extends WatchUi.View {
     function onTimerTick() {
         if (_running) {
             _elapsedSeconds = Time.now().value() - _setStartTimeValue;
+        }
+
+        if (_pendingAddLaps > 0 && _session != null) {
+            try {
+                if (_session.isRecording()) {
+                    _session.addLap();
+                    _pendingAddLaps--;
+                }
+            } catch (ex) {
+                _pendingAddLaps = 0;
+                System.println("Add lap failed");
+            }
         }
 
         refreshActivitySnapshots();
@@ -449,20 +465,10 @@ class SwimSetView extends WatchUi.View {
             updateSessionFitFields(getTotalElapsedSeconds());
             updateRecordFitFields();
 
-            if (_session != null) {
-                try {
-                    if (_session.isRecording()) {
-                        // addLap() counts as one pool length; call once per length so
-                        // Garmin Connect native distance matches actual lengths swum
-                        for (var i = 0; i < _lapsPerSet; i++) {
-                            _session.addLap();
-                        }
-                        System.println("Laps added: " + _lapsPerSet);
-                    }
-                } catch (ex) {
-                    System.println("Add lap failed");
-                }
-            }
+            // addLap() counts as one pool length in Garmin Connect. Queue
+            // _lapsPerSet calls and drain one per tick to avoid zero-duration
+            // laps and synchronous I/O pressure in a single frame.
+            _pendingAddLaps += _lapsPerSet;
 
             _currentSet++;
             _setStartTimeValue = Time.now().value();
