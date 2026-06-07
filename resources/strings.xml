@@ -10,6 +10,16 @@
     <string id="Discard">Discard|放弃|破棄</string>
     <string id="Options">Options|选项|オプション</string>
     <string id="Settings">Settings|设置|設定</string>
+    <string id="Trainings">Trainings|训练|トレーニング</string>
+    <string id="CreateTraining">Create|创建|作成</string>
+    <string id="AppSettings">App Settings|应用设置|アプリ設定</string>
+    <string id="Edit">Edit|编辑|編集</string>
+    <string id="Duplicate">Duplicate|复制|複製</string>
+    <string id="Rename">Rename|重命名|名前変更</string>
+    <string id="Delete">Delete|删除|削除</string>
+    <string id="DeleteConfirm">Delete training?|删除此训练？|このトレーニングを削除しますか？</string>
+    <string id="TrainingPrefix">Training|训练|トレーニング</string>
+    <string id="Finish">Finish|完成|完了</string>
 
     <string id="PoolSize">Pool Size|泳池长度|プールサイズ</string>
     <string id="PoolUnit">Pool Unit|单位|単位</string>
@@ -43,7 +53,7 @@
     <string id="Sets">Sets|组数|セット数</string>
     <string id="Lengths">Lengths|趟数|本数</string>
     <string id="Version">Version|版本|バージョン</string>
-    <string id="AppVersion">26.5.0</string>
+    <string id="AppVersion">26.6.0</string>
     <string id="Yds">yds|码|ヤード</string>
     <string id="M">m|米|m</string>
 

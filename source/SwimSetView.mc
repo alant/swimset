@@ -243,7 +243,6 @@ class SwimSetView extends WatchUi.View {
 
         if (!_hasStarted) {
             _mainMenu.addItem(new WatchUi.MenuItem(L(Rez.Strings.Start), null, :start, {}));
-            _mainMenu.addItem(new WatchUi.MenuItem(L(Rez.Strings.Settings), null, :settings, {}));
         } else {
             if (_paused) {
                 _mainMenu.addItem(new WatchUi.MenuItem(L(Rez.Strings.Resume), null, :resume, {}));
@@ -493,7 +492,7 @@ class SwimSetView extends WatchUi.View {
     }
 
     function hasStarted() {
-        return _hasStarted;
+        return _hasStarted && !_hasSaved;
     }
 
     function isRunning() {

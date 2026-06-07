@@ -96,8 +96,8 @@ class SetTimeView extends WatchUi.View {
 
     function adjustSeconds(delta) {
         _seconds += delta;
-        if (_seconds < 0) { _seconds = 0; }
-        if (_seconds > 55) { _seconds = 55; }
+        if (_seconds < 0) { _seconds = 55; }
+        if (_seconds > 55) { _seconds = 0; }
         WatchUi.requestUpdate();
     }
 
@@ -125,11 +125,11 @@ class SetTimeView extends WatchUi.View {
     }
 
     private function previousSeconds() {
-        return _seconds > 0 ? _seconds - 5 : 0;
+        return _seconds > 0 ? _seconds - 5 : 55;
     }
 
     private function nextSeconds() {
-        return _seconds < 55 ? _seconds + 5 : 55;
+        return _seconds < 55 ? _seconds + 5 : 0;
     }
 
     private function formatMinutes(value) {
@@ -202,7 +202,7 @@ class SetTimeDelegate extends WatchUi.BehaviorDelegate {
 
     function onBack() {
         _view.save();
-        _mainView.loadSettings();
+        if (_mainView != null) { _mainView.loadSettings(); }
 
         var min = _view.getMinutes();
         var sec = _view.getSeconds();
