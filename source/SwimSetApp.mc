@@ -4,7 +4,6 @@ using Toybox.System;
 using Toybox.Lang;
 
 class SwimSetApp extends Application.AppBase {
-    private var _view;
 
     function initialize() {
         AppBase.initialize();
@@ -17,16 +16,14 @@ class SwimSetApp extends Application.AppBase {
     }
 
     function getInitialView() {
-        _view = new SwimSetView();
-        return [_view, new SwimSetDelegate()];
+        TrainingStore.migrateIfNeeded();
+        var menu = new TrainingListMenu();
+        return [menu, new TrainingListDelegate(menu)];
     }
 
     function onSettingsChanged() {
-        _lCache = {} as Toybox.Lang.Dictionary<Toybox.Lang.ResourceId, Toybox.Lang.String>; // Clear cache on settings change
-        if (_view != null) {
-            _view.loadSettings();
-            WatchUi.requestUpdate();
-        }
+        _lCache = {} as Toybox.Lang.Dictionary<Toybox.Lang.ResourceId, Toybox.Lang.String>;
+        WatchUi.requestUpdate();
     }
 }
 
