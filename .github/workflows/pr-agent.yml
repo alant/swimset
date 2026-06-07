@@ -17,10 +17,17 @@ jobs:
         uses: the-pr-agent/pr-agent@main
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          config.model: "gemini/gemini-1.5-flash"
-          config.fallback_models: '["gemini/gemini-1.5-flash"]'
+          config.model: "gemini/gemini-2.0-flash"
+          config.fallback_models: '["gemini/gemini-2.0-flash"]'
           config.custom_model_max_tokens: "1000000"
           GOOGLE_AI_STUDIO.GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+
+          # To restore OpenAI / Custom proxy configuration:
+          # config.model: "openai/gemini-3-flash-preview"
+          # config.fallback_models: '["openai/gemini-3-flash-preview"]'
+          # OPENAI.KEY: ${{ secrets.NEWAPI_KEY }}
+          # OPENAI.API_BASE: "https://newapi.hybaliez.com/v1"
+
           github_action_config.auto_review: "true"
           github_action_config.auto_describe: "false"
           github_action_config.auto_improve: "false"
