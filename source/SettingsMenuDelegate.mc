@@ -156,7 +156,7 @@ class SettingOptionsDelegate extends WatchUi.Menu2InputDelegate {
 // title    = menu header (training name for Create/Edit, "Settings" in-workout)
 // saveAction = null (in-workout), String (new training name), Number (training index)
 // Back saves the training when saveAction is not null.
-function buildTrainingSettingsMenu(mainView, saveAction, title) {
+function buildTrainingSettingsMenu(mainView, saveAction, title, useSwitchTo) {
     var rd = new SettingsReader();
     var menu = new WatchUi.Menu2({ :title => title });
     menu.addItem(new WatchUi.MenuItem(L(Rez.Strings.PoolSize),   rd.get("PoolSize", 25).toString(),  :poolSize,   {}));
@@ -168,7 +168,12 @@ function buildTrainingSettingsMenu(mainView, saveAction, title) {
     menu.addItem(new WatchUi.MenuItem(L(Rez.Strings.Alarm20),    rd.alarmLabel("Enable20SecAlarm"),  :alarm20,    {}));
     menu.addItem(new WatchUi.MenuItem(L(Rez.Strings.Alarm10),    rd.alarmLabel("Enable10SecAlarm"),  :alarm10,    {}));
     menu.addItem(new WatchUi.MenuItem(L(Rez.Strings.Finish),     null,                               :finish,     {}));
-    WatchUi.pushView(menu, new SwimSetSettingsDelegate(mainView, saveAction), WatchUi.SLIDE_LEFT);
+    var delegate = new SwimSetSettingsDelegate(mainView, saveAction);
+    if (useSwitchTo) {
+        WatchUi.switchToView(menu, delegate, WatchUi.SLIDE_LEFT);
+    } else {
+        WatchUi.pushView(menu, delegate, WatchUi.SLIDE_LEFT);
+    }
 }
 
 // App-level settings (Language + Version). Accessible from training list only.
@@ -182,7 +187,7 @@ function buildAppSettingsMenu() {
 
 // In-workout shortcut: edits settings in-place without saving to a training slot.
 function buildSettingsMenu(mainView) {
-    buildTrainingSettingsMenu(mainView, null, L(Rez.Strings.Settings));
+    buildTrainingSettingsMenu(mainView, null, L(Rez.Strings.Settings), false);
 }
 
 // ── Tiny helper to read stored/property values ───────────────────────────────

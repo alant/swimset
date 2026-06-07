@@ -21,7 +21,7 @@ class TrainingListMenu extends WatchUi.Menu2 {
         if (_pendingCreateName != null) {
             var name = _pendingCreateName;
             _pendingCreateName = null;
-            buildTrainingSettingsMenu(null, name, name);
+            buildTrainingSettingsMenu(null, name, name, false);
             return;
         }
         _rebuild();
@@ -116,28 +116,26 @@ class TrainingActionDelegate extends WatchUi.Menu2InputDelegate {
     function onSelect(item) {
         var id = item.getId();
         if (id == :start) {
-            WatchUi.popView(WatchUi.SLIDE_RIGHT);
             TrainingStore.copyToGlobal(_index);
             var view = new SwimSetView();
-            WatchUi.pushView(view, new SwimSetDelegate(), WatchUi.SLIDE_LEFT);
+            WatchUi.switchToView(view, new SwimSetDelegate(), WatchUi.SLIDE_LEFT);
             view.startTimer();
         } else if (id == :edit) {
-            WatchUi.popView(WatchUi.SLIDE_RIGHT);
             TrainingStore.copyToGlobal(_index);
             var t = TrainingStore.getTraining(_index) as Toybox.Lang.Dictionary<Toybox.Lang.String, Toybox.Lang.Object>;
             var name = t["name"] as Toybox.Lang.String;
-            buildTrainingSettingsMenu(null, _index, name);
+            buildTrainingSettingsMenu(null, _index, name, true);
         } else if (id == :duplicate) {
             TrainingStore.duplicateTraining(_index);
             WatchUi.popView(WatchUi.SLIDE_RIGHT);
         } else if (id == :rename) {
             var t = TrainingStore.getTraining(_index) as Toybox.Lang.Dictionary<Toybox.Lang.String, Toybox.Lang.Object>;
-            WatchUi.pushView(
+            WatchUi.switchToView(
                 new WatchUi.TextPicker(t["name"] as Toybox.Lang.String),
                 new TrainingRenameDelegate(_index),
                 WatchUi.SLIDE_LEFT);
         } else if (id == :delete) {
-            WatchUi.pushView(
+            WatchUi.switchToView(
                 new WatchUi.Confirmation(L(Rez.Strings.DeleteConfirm)),
                 new TrainingDeleteDelegate(_index),
                 WatchUi.SLIDE_LEFT);
