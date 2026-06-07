@@ -51,9 +51,9 @@ class SwimSetSettingsDelegate extends WatchUi.Menu2InputDelegate {
         }
     }
 
-    function onBack() as Lang.Boolean {
+    function onBack() {
         _save();
-        return false;
+        WatchUi.popView(WatchUi.SLIDE_RIGHT);
     }
 
     private function _save() {
