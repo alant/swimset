@@ -175,7 +175,6 @@ class TrainingDeleteDelegate extends WatchUi.ConfirmationDelegate {
         if (response == WatchUi.CONFIRM_YES) {
             TrainingStore.deleteTraining(_index);
         }
-        WatchUi.popView(WatchUi.SLIDE_RIGHT);
         return true;
     }
 }
