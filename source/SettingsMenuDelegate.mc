@@ -21,7 +21,8 @@ class SwimSetSettingsDelegate extends WatchUi.Menu2InputDelegate {
     function onSelect(item) {
         var idx = item.getId();
         if (idx == :finish) {
-            onBack();
+            _save();
+            WatchUi.popView(WatchUi.SLIDE_RIGHT);
             return;
         } else if (idx == :poolSize) {
             pushOptions(L(Rez.Strings.PoolSize), "PoolSize", [10, 15, 20, 25, 50], null, item);
@@ -51,12 +52,15 @@ class SwimSetSettingsDelegate extends WatchUi.Menu2InputDelegate {
     }
 
     function onBack() {
+        _save();
+    }
+
+    private function _save() {
         if (_saveAction instanceof Toybox.Lang.String) {
             TrainingStore.createFromGlobalWithName(_saveAction as Toybox.Lang.String);
         } else if (_saveAction instanceof Toybox.Lang.Number) {
             TrainingStore.copyFromGlobal(_saveAction as Toybox.Lang.Number);
         }
-        WatchUi.popView(WatchUi.SLIDE_RIGHT);
     }
 
     private function pushOptions(title, key, values, labels, parentItem) {
@@ -107,9 +111,6 @@ class AppSettingsDelegate extends WatchUi.Menu2InputDelegate {
         // :appVersion is read-only — no action
     }
 
-    function onBack() {
-        WatchUi.popView(WatchUi.SLIDE_RIGHT);
-    }
 }
 
 // ── Individual option selector ───────────────────────────────────────────────
@@ -142,10 +143,6 @@ class SettingOptionsDelegate extends WatchUi.Menu2InputDelegate {
         else if (_key.equals("AppLanguage"))        { subLabel = rd.langLabel(); }
 
         _parentItem.setSubLabel(subLabel);
-        WatchUi.popView(WatchUi.SLIDE_RIGHT);
-    }
-
-    function onBack() {
         WatchUi.popView(WatchUi.SLIDE_RIGHT);
     }
 }

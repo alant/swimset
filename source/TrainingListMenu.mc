@@ -7,6 +7,7 @@ using Toybox.Timer;
 class TrainingListMenu extends WatchUi.Menu2 {
     private var _itemCount = 0;
     private var _pendingCreateName = null;
+    private var _pendingShowTimer = null;
 
     function initialize() {
         WatchUi.Menu2.initialize({ :title => L(Rez.Strings.Trainings) });
@@ -19,13 +20,19 @@ class TrainingListMenu extends WatchUi.Menu2 {
 
     function onShow() {
         if (_pendingCreateName != null) {
-            var name = _pendingCreateName;
-            _pendingCreateName = null;
-            buildTrainingSettingsMenu(null, name, name, false);
+            _pendingShowTimer = new Timer.Timer();
+            _pendingShowTimer.start(method(:_pushCreateSettings), 50, false);
             return;
         }
         _rebuild();
         WatchUi.requestUpdate();
+    }
+
+    function _pushCreateSettings() as Void {
+        var name = _pendingCreateName;
+        _pendingCreateName = null;
+        _pendingShowTimer = null;
+        buildTrainingSettingsMenu(null, name, name, false);
     }
 
     private function _rebuild() {
@@ -142,9 +149,6 @@ class TrainingActionDelegate extends WatchUi.Menu2InputDelegate {
         }
     }
 
-    function onBack() {
-        WatchUi.popView(WatchUi.SLIDE_RIGHT);
-    }
 }
 
 class TrainingRenameDelegate extends WatchUi.TextPickerDelegate {
